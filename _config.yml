@@ -1,7 +1,7 @@
 title: "Московское метро — мои посещения"
 description: "Личный трекер посещённых станций Московского метро"
-baseurl: "metro.ahpooch.com"
-url: ""
+baseurl: ""
+url: "https://metro.ahpooch.com"
 
 # Если true — станции с фотографиями автоматически считаются посещёнными
 visited_if_has_photo: true
