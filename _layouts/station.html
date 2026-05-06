@@ -1,0 +1,98 @@
+---
+layout: default
+---
+{% assign station_slug = page.name | remove: '.md' %}
+{% assign photo_folder = 'assets/photos/' | append: station_slug | append: '/' %}
+{% assign auto_photos = site.static_files | where_exp: "file", "file.path contains photo_folder" %}
+
+{% assign has_photos = false %}
+{% if page.cover_photo or page.photos.size > 0 or auto_photos.size > 0 %}
+  {% assign has_photos = true %}
+{% endif %}
+{% assign is_visited = page.visited %}
+{% if site.visited_if_has_photo and has_photos %}
+  {% assign is_visited = true %}
+{% endif %}
+
+<article class="station-page">
+
+  <header class="station-header" style="{% if has_photos %}border-left: 6px solid {{ page.line_color | default: '#e63946' }};{% endif %}">
+    <div class="station-meta-top">
+      {% if page.line_name %}
+      <span class="line-badge" style="background-color: {{ page.line_color | default: '#e63946' }}">
+        {{ page.line_name }}
+      </span>
+      {% endif %}
+      {% if is_visited %}
+      <span class="visited-badge">✓ Посещена</span>
+      {% else %}
+      <span class="not-visited-badge">Не посещена</span>
+      {% endif %}
+    </div>
+
+    <h1 class="station-title">{{ page.title }}</h1>
+
+    {% if page.visited_date %}
+    <p class="visited-date">📅 Дата посещения: <strong>{{ page.visited_date | date: "%d.%m.%Y" }}</strong></p>
+    {% endif %}
+
+    {% if page.cover_photo %}
+    <div class="cover-photo">
+      <img src="{{ page.cover_photo | relative_url }}" alt="Титульное фото — {{ page.title }}">
+    </div>
+    {% elsif page.photos and page.photos.size > 0 %}
+    <div class="cover-photo">
+      <img src="{{ page.photos[0].url | relative_url }}" alt="Титульное фото — {{ page.title }}">
+    </div>
+    {% elsif auto_photos.size > 0 %}
+    <div class="cover-photo">
+      <img src="{{ auto_photos[0].path | relative_url }}" alt="Титульное фото — {{ page.title }}">
+    </div>
+    {% endif %}
+  </header>
+
+  <div class="station-body">
+    {{ content }}
+  </div>
+
+  {% if page.photos and page.photos.size > 0 %}
+  <section class="station-gallery">
+    <h2>Фотографии</h2>
+    <div class="gallery-grid">
+      {% for photo in page.photos %}
+      <figure class="gallery-item">
+        <a href="{{ photo.url | relative_url }}" target="_blank">
+          <img src="{{ photo.url | relative_url }}" alt="{{ photo.caption | default: page.title }}">
+        </a>
+        {% if photo.caption %}
+        <figcaption>{{ photo.caption }}</figcaption>
+        {% endif %}
+      </figure>
+      {% endfor %}
+    </div>
+  </section>
+  {% elsif auto_photos.size > 0 %}
+  <section class="station-gallery">
+    <h2>Фотографии</h2>
+    <div class="gallery-grid">
+      {% for file in auto_photos %}
+      <figure class="gallery-item">
+        <a href="{{ file.path | relative_url }}" target="_blank">
+          <img src="{{ file.path | relative_url }}" alt="{{ page.title }}">
+        </a>
+      </figure>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <footer class="station-footer">
+    <a href="{{ '/' | relative_url }}" class="back-link">← Все станции</a>
+    {% if page.line_name %}
+    <a href="{{ '/lines/' | relative_url }}#{{ page.line_name | slugify }}" class="line-link">
+      Все станции линии «{{ page.line_name }}»
+    </a>
+    {% endif %}
+  </footer>
+
+</article>

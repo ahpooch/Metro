@@ -1,0 +1,3 @@
+# Ignore _site
+_site/**
+assets/photos/_site/**

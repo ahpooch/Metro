@@ -1,0 +1,159 @@
+---
+layout: default
+title: "Станции по линиям"
+permalink: /lines/
+---
+
+{% assign all_stations = site.stations | sort: "line_number" %}
+{% assign line_numbers  = all_stations | map: "line_number" | uniq %}
+
+<div class="lines-layout{% if site.sidebar_position == 'right' %} lines-layout--right{% endif %}">
+
+  {%- comment -%} ===== БОКОВАЯ ПАНЕЛЬ (ToC) ===== {%- endcomment -%}
+  <aside class="lines-toc">
+    <div class="lines-toc-inner">
+      <h2 class="lines-toc-title">Линии</h2>
+
+      <nav class="lines-toc-nav">
+        {% for line_num in line_numbers %}
+          {% assign line_stations = all_stations | where: "line_number", line_num | sort: "title" %}
+          {% assign first = line_stations | first %}
+
+          {% assign toc_visited = 0 %}
+          {% for station in line_stations %}
+            {% assign s_slug   = station.name | remove: '.md' %}
+            {% assign s_folder = 'assets/photos/' | append: s_slug | append: '/' %}
+            {% assign s_auto   = site.static_files | where_exp: "file", "file.path contains s_folder" %}
+            {% assign has_ph   = false %}
+            {% if station.cover_photo or station.photos.size > 0 or s_auto.size > 0 %}
+              {% assign has_ph = true %}
+            {% endif %}
+            {% assign vis = station.visited %}
+            {% if site.visited_if_has_photo and has_ph %}{% assign vis = true %}{% endif %}
+            {% if vis %}{% assign toc_visited = toc_visited | plus: 1 %}{% endif %}
+          {% endfor %}
+
+          <a class="toc-line-item" href="#{{ first.line_name | slugify }}">
+            <span class="toc-line-dot" style="background-color: {{ first.line_color | default: '#888' }}"></span>
+            <span class="toc-line-name">{{ first.line_name }}</span>
+            <span class="toc-line-count">{{ toc_visited }}/{{ line_stations | size }}</span>
+          </a>
+        {% endfor %}
+      </nav>
+    </div>
+  </aside>
+
+  {%- comment -%} ===== ОСНОВНОЙ КОНТЕНТ ===== {%- endcomment -%}
+  <div class="lines-main">
+    <h1 style="margin-bottom: 2rem;">🗺 Станции по линиям</h1>
+
+    <div class="lines-filter-bar">
+      <label class="toggle-label" for="hideNotVisited">
+        <span class="toggle-switch">
+          <input type="checkbox" id="hideNotVisited" checked>
+          <span class="toggle-slider"></span>
+        </span>
+        Скрывать непосещённые станции
+      </label>
+    </div>
+
+    {% for line_num in line_numbers %}
+      {% assign line_stations = all_stations | where: "line_number", line_num | sort: "title" %}
+      {% assign first = line_stations | first %}
+
+      {% assign visited_on_line = 0 %}
+      {% for station in line_stations %}
+        {% assign s_slug = station.name | remove: '.md' %}
+        {% assign s_folder = 'assets/photos/' | append: s_slug | append: '/' %}
+        {% assign s_auto = site.static_files | where_exp: "file", "file.path contains s_folder" %}
+        {% assign card_has_photos = false %}
+        {% if station.cover_photo or station.photos.size > 0 or s_auto.size > 0 %}
+          {% assign card_has_photos = true %}
+        {% endif %}
+        {% assign card_visited = station.visited %}
+        {% if site.visited_if_has_photo and card_has_photos %}
+          {% assign card_visited = true %}
+        {% endif %}
+        {% if card_visited %}
+          {% assign visited_on_line = visited_on_line | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+
+      <section class="line-section" id="{{ first.line_name | slugify }}">
+        <h2 class="line-section-title">
+          <span class="line-color-bar" style="background-color: {{ first.line_color | default: '#888' }}"></span>
+          Линия {{ line_num }} — {{ first.line_name }}
+          <small style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 400; margin-left: 0.5rem;">
+            {{ visited_on_line }} / {{ line_stations | size }} посещено
+          </small>
+        </h2>
+
+        <div class="stations-grid">
+          {% for station in line_stations %}
+            {% assign s_slug = station.name | remove: '.md' %}
+            {% assign s_folder = 'assets/photos/' | append: s_slug | append: '/' %}
+            {% assign s_auto_photos = site.static_files | where_exp: "file", "file.path contains s_folder" %}
+            {% assign card_has_photos = false %}
+            {% if station.cover_photo or station.photos.size > 0 or s_auto_photos.size > 0 %}
+              {% assign card_has_photos = true %}
+            {% endif %}
+            {% assign card_visited = station.visited %}
+            {% if site.visited_if_has_photo and card_has_photos %}
+              {% assign card_visited = true %}
+            {% endif %}
+          <div class="station-card {% if card_visited %}visited{% else %}not-visited{% endif %}">
+            {% if station.cover_photo %}
+            <a href="{{ station.url | relative_url }}" class="card-thumb-link">
+              <img class="card-thumb"
+                   src="{{ station.cover_photo | relative_url }}"
+                   alt="{{ station.title }}"
+                   loading="lazy">
+            </a>
+            {% elsif s_auto_photos.size > 0 %}
+            <a href="{{ station.url | relative_url }}" class="card-thumb-link">
+              <img class="card-thumb"
+                   src="{{ s_auto_photos[0].path | relative_url }}"
+                   alt="{{ station.title }}"
+                   loading="lazy">
+            </a>
+            {% else %}
+            <a href="{{ station.url | relative_url }}" class="card-thumb-link">
+              <div class="card-thumb-placeholder">🚉</div>
+            </a>
+            {% endif %}
+
+            <div class="card-body">
+              <a class="card-title" href="{{ station.url | relative_url }}">{{ station.title }}</a>
+
+              <span class="card-status {% if card_visited %}visited{% else %}not-visited{% endif %}">
+                {% if card_visited %}✓ Посещена{% else %}Не посещена{% endif %}
+              </span>
+
+              {% if station.visited_date %}
+              <div class="card-date">{{ station.visited_date | date: "%d.%m.%Y" }}</div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </div>{%- comment -%}/.lines-main{%- endcomment -%}
+
+</div>{%- comment -%}/.lines-layout{%- endcomment -%}
+
+<script>
+(function () {
+  var checkbox = document.getElementById('hideNotVisited');
+
+  function applyFilter() {
+    var hide = checkbox.checked;
+    document.querySelectorAll('.station-card.not-visited').forEach(function (card) {
+      card.style.display = hide ? 'none' : '';
+    });
+  }
+
+  applyFilter();
+  checkbox.addEventListener('change', applyFilter);
+})();
+</script>

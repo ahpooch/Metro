@@ -1,0 +1,143 @@
+---
+layout: default
+title: "Мои станции"
+---
+
+{% assign all_stations = site.stations %}
+{% assign total = all_stations | size %}
+
+{% if site.visited_if_has_photo %}
+  {% assign visited_count = 0 %}
+  {% for station in all_stations %}
+    {% assign s_slug = station.name | remove: '.md' %}
+    {% assign s_folder = 'assets/photos/' | append: s_slug | append: '/' %}
+    {% assign s_auto = site.static_files | where_exp: "file", "file.path contains s_folder" %}
+    {% if station.visited or station.cover_photo or station.photos.size > 0 or s_auto.size > 0 %}
+      {% assign visited_count = visited_count | plus: 1 %}
+    {% endif %}
+  {% endfor %}
+{% else %}
+  {% assign visited_stations = all_stations | where: "visited", true %}
+  {% assign visited_count = visited_stations | size %}
+{% endif %}
+
+{% if total > 0 %}
+  {% assign percent = visited_count | times: 100 | divided_by: total %}
+{% else %}
+  {% assign percent = 0 %}
+{% endif %}
+
+<section class="hero">
+  <h1>🚇 Московское метро</h1>
+  <p>Отмечаю станции, которые успел посетить и сфотографировать.</p>
+</section>
+
+<!-- Статистика -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="number">{{ visited_count }}</div>
+    <div class="label">Посещено</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">{{ total }}</div>
+    <div class="label">Всего станций</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">{{ percent }}%</div>
+    <div class="label">Пройдено</div>
+  </div>
+</div>
+
+<!-- Прогресс-бар -->
+<div class="progress-bar-wrap" title="{{ visited_count }} из {{ total }} станций">
+  <div class="progress-bar-fill" style="width: {{ percent }}%"></div>
+</div>
+
+<!-- Фильтры -->
+{% assign df = site.default_filter | default: 'all' %}
+<div class="filters">
+  <label>Показать:</label>
+  <button class="filter-btn{% if df == 'all' %} active{% endif %}" onclick="filterCards('all', this)">Все</button>
+  <button class="filter-btn{% if df == 'visited' %} active{% endif %}" onclick="filterCards('visited', this)">Посещённые</button>
+  <button class="filter-btn{% if df == 'not-visited' %} active{% endif %}" onclick="filterCards('not-visited', this)">Не посещённые</button>
+</div>
+
+<!-- Сетка станций -->
+<div class="stations-grid" id="stations-grid">
+  {% assign sorted_stations = all_stations | sort: "title" %}
+  {% for station in sorted_stations %}
+    {% assign s_slug = station.name | remove: '.md' %}
+    {% assign s_folder = 'assets/photos/' | append: s_slug | append: '/' %}
+    {% assign s_auto_photos = site.static_files | where_exp: "file", "file.path contains s_folder" %}
+    {% assign card_has_photos = false %}
+    {% if station.cover_photo or station.photos.size > 0 or s_auto_photos.size > 0 %}
+      {% assign card_has_photos = true %}
+    {% endif %}
+    {% assign card_visited = station.visited %}
+    {% if site.visited_if_has_photo and card_has_photos %}
+      {% assign card_visited = true %}
+    {% endif %}
+  <div class="station-card {% if card_visited %}visited{% else %}not-visited{% endif %}"
+       data-status="{% if card_visited %}visited{% else %}not-visited{% endif %}">
+
+    {% if station.cover_photo %}
+    <a href="{{ station.url | relative_url }}" class="card-thumb-link">
+      <img class="card-thumb"
+           src="{{ station.cover_photo | relative_url }}"
+           alt="{{ station.title }}"
+           loading="lazy">
+    </a>
+    {% elsif s_auto_photos.size > 0 %}
+    <a href="{{ station.url | relative_url }}" class="card-thumb-link">
+      <img class="card-thumb"
+           src="{{ s_auto_photos[0].path | relative_url }}"
+           alt="{{ station.title }}"
+           loading="lazy">
+    </a>
+    {% else %}
+    <a href="{{ station.url | relative_url }}" class="card-thumb-link">
+      <div class="card-thumb-placeholder">🚉</div>
+    </a>
+    {% endif %}
+
+    <div class="card-body">
+      {% if station.line_name %}
+      <div class="card-line">
+        <span class="line-dot" style="background-color: {{ station.line_color | default: '#888' }}"></span>
+        {{ station.line_name }}
+      </div>
+      {% endif %}
+
+      <a class="card-title" href="{{ station.url | relative_url }}">{{ station.title }}</a>
+
+      <span class="card-status {% if card_visited %}visited{% else %}not-visited{% endif %}">
+        {% if card_visited %}✓ Посещена{% else %}Не посещена{% endif %}
+      </span>
+
+      {% if station.visited_date %}
+      <div class="card-date">{{ station.visited_date | date: "%d.%m.%Y" }}</div>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+function filterCards(status, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.querySelectorAll('.station-card').forEach(function(card) {
+    card.style.display = (status === 'all' || card.dataset.status === status) ? '' : 'none';
+  });
+}
+
+// Применяем фильтр по умолчанию из конфига при загрузке страницы
+(function() {
+  var defaultFilter = '{{ site.default_filter | default: "all" }}';
+  var activeBtn = document.querySelector('.filter-btn.active');
+  if (activeBtn) {
+    filterCards(defaultFilter, activeBtn);
+  }
+})();
+</script>

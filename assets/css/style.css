@@ -1,0 +1,725 @@
+/* ==============================
+   Сброс и базовые стили
+   ============================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #0d0d0d;
+  --color-surface: #1a1a1a;
+  --color-surface-2: #222;
+  --color-border: #333;
+  --color-text: #e8e8e8;
+  --color-text-muted: #888;
+  --color-accent: #e63946;
+  --color-visited: #4caf50;
+  --color-not-visited: #666;
+  --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --radius: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ==============================
+   Шапка
+   ============================== */
+.site-header {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.site-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.site-title:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+.metro-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-accent);
+  color: #fff;
+  font-weight: 900;
+  font-size: 1.1rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.site-nav a {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.site-nav a:hover {
+  color: var(--color-text);
+  text-decoration: none;
+  opacity: 1;
+}
+
+/* ==============================
+   Основной контент
+   ============================== */
+.main-content {
+  flex: 1;
+  padding: 2.5rem 0;
+}
+
+/* ==============================
+   Подвал
+   ============================== */
+.site-footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 1.25rem 0;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* ==============================
+   Главная страница — статистика
+   ============================== */
+.hero {
+  margin-bottom: 2.5rem;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero p {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.stats-bar {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.75rem;
+  text-align: center;
+  min-width: 130px;
+}
+
+.stat-card .number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.stat-card .label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.progress-bar-wrap {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  height: 10px;
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent), #ff6b6b);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+/* ==============================
+   Фильтры
+   ============================== */
+.filters {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+  align-items: center;
+}
+
+.filters label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.filter-btn {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+  background: rgba(230, 57, 70, 0.12);
+}
+
+/* ==============================
+   Сетка карточек станций
+   ============================== */
+.stations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.station-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.station-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.station-card.visited {
+  border-left: 4px solid var(--color-visited);
+}
+
+.station-card.not-visited {
+  border-left: 4px solid var(--color-not-visited);
+  opacity: 0.7;
+}
+
+.card-thumb {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+  background: var(--color-surface-2);
+}
+
+.card-thumb-placeholder {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--color-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: var(--color-border);
+}
+
+.card-body {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.card-line {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.line-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.card-title:hover {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.card-date {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: auto;
+}
+
+.card-status {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.card-status.visited {
+  background: rgba(76, 175, 80, 0.15);
+  color: var(--color-visited);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.card-status.not-visited {
+  background: rgba(102, 102, 102, 0.15);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+/* ==============================
+   Страница станции
+   ============================== */
+.station-page {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.station-header {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}
+
+.station-meta-top {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.line-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.visited-badge {
+  font-size: 0.8rem;
+  color: var(--color-visited);
+  background: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+
+.not-visited-badge {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  background: rgba(102, 102, 102, 0.1);
+  border: 1px solid var(--color-border);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+
+.station-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.visited-date {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.cover-photo {
+  margin-top: 1rem;
+  border-radius: calc(var(--radius) - 2px);
+  overflow: hidden;
+}
+
+.cover-photo img {
+  width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  background: var(--color-surface-2);
+}
+
+/* Тело страницы станции */
+.station-body {
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+
+.station-body h2 {
+  font-size: 1.4rem;
+  margin: 2rem 0 0.75rem;
+  color: var(--color-text);
+}
+
+.station-body h3 {
+  font-size: 1.15rem;
+  margin: 1.5rem 0 0.5rem;
+  color: var(--color-text);
+}
+
+.station-body p {
+  margin-bottom: 1rem;
+}
+
+.station-body ul, .station-body ol {
+  margin: 0.75rem 0 1rem 1.5rem;
+}
+
+/* ==============================
+   Галерея
+   ============================== */
+.station-gallery {
+  margin-bottom: 2.5rem;
+}
+
+.station-gallery h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.gallery-item {
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.gallery-item img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+  background: var(--color-surface-2);
+  transition: transform 0.3s;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.04);
+}
+
+.gallery-item figcaption {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* ==============================
+   Подвал страницы станции
+   ============================== */
+.station-footer {
+  display: flex;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.back-link, .line-link {
+  font-size: 0.9rem;
+}
+
+/* ==============================
+   Лейаут страницы «По линиям» (основа + боковая панель)
+   ============================== */
+.lines-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-areas: "sidebar main";
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Правая боковая панель */
+.lines-layout--right {
+  grid-template-columns: 1fr 240px;
+  grid-template-areas: "main sidebar";
+}
+
+.lines-toc {
+  grid-area: sidebar;
+  position: sticky;
+  top: calc(1rem + 60px); /* учитываем высоту sticky-шапки */
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.lines-toc-inner {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.lines-toc-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.lines-toc-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toc-line-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.toc-line-item:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--color-text);
+  text-decoration: none;
+  opacity: 1;
+}
+
+.toc-line-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.toc-line-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toc-line-count {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.lines-main {
+  grid-area: main;
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  .lines-layout,
+  .lines-layout--right {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "sidebar"
+      "main";
+  }
+
+  .lines-toc {
+    position: static;
+    max-height: none;
+  }
+}
+
+/* ==============================
+   Панель фильтра на странице линий
+   ============================== */
+.lines-filter-bar {
+  margin-bottom: 1.75rem;
+}
+
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  user-select: none;
+}
+
+.toggle-label:hover {
+  color: var(--color-text);
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-border);
+  border-radius: 999px;
+  transition: background-color 0.2s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 3px;
+  top: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--color-accent);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(18px);
+}
+
+/* ==============================
+   Секция по линиям
+   ============================== */
+.line-section {
+  margin-bottom: 2.5rem;
+  /* Компенсация высоты sticky-шапки (~64px) + небольшой отступ */
+  scroll-margin-top: 80px;
+}
+
+.line-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.line-color-bar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ==============================
+   Адаптивность
+   ============================== */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.5rem; }
+  .stations-grid { grid-template-columns: 1fr; }
+  .stat-card .number { font-size: 2rem; }
+  .site-nav { gap: 1rem; }
+  .station-title { font-size: 1.5rem; }
+}

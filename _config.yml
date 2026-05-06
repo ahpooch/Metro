@@ -1,0 +1,44 @@
+title: "Московское метро — мои посещения"
+description: "Личный трекер посещённых станций Московского метро"
+baseurl: "metro.ahpooch.com"
+url: ""
+
+# Если true — станции с фотографиями автоматически считаются посещёнными
+visited_if_has_photo: true
+
+# Положение боковых панелей (ToC и др.): left или right
+sidebar_position: left
+
+# Фильтр по умолчанию на главной странице: all | visited | not-visited
+default_filter: visited
+
+# Коллекция станций
+collections:
+  stations:
+    output: true
+    permalink: /stations/:name/
+
+# Настройки по умолчанию
+defaults:
+  - scope:
+      path: ""
+      type: "stations"
+    values:
+      layout: "station"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+# Плагины
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Исключаем из сборки
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor/
