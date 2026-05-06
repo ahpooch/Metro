@@ -6,6 +6,6 @@ line_name: "Некрасовская"
 line_number: 15
 line_color: "#de8fbe"
 
-cover_photo:
+cover_photo: '/assets/photos/nekrasovskaya-kosino/IMG20260504210708 (Малый).jpg'
 photos: []
 ---
