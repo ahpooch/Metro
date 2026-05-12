@@ -208,10 +208,14 @@ LINES = [
 ]
 
 STATIONS_DIR = "_stations"
+PHOTOS_DIR = os.path.join("assets", "photos")
 os.makedirs(STATIONS_DIR, exist_ok=True)
+os.makedirs(PHOTOS_DIR, exist_ok=True)
 
 created = 0
 skipped = 0
+photos_created = 0
+photos_skipped = 0
 
 for line in LINES:
     line_slug = slugify(line["name"])
@@ -230,15 +234,16 @@ for line in LINES:
         seen_stations.add(station_name)
 
         station_slug = slugify(station_name)
-        filename = f"{line_slug}-{station_slug}.md"
+        folder_name = f"{line_slug}-{station_slug}"
+        filename = f"{folder_name}.md"
         filepath = os.path.join(STATIONS_DIR, filename)
+        photo_dir = os.path.join(PHOTOS_DIR, folder_name)
 
         if os.path.exists(filepath):
             print(f"SKIP (exists): {filename}")
             skipped += 1
-            continue
-
-        content = f"""---
+        else:
+            content = f"""---
 title: "{station_name}"
 visited: false
 
@@ -250,9 +255,19 @@ cover_photo:
 photos: []
 ---
 """
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(content)
-        print(f"CREATED: {filename}")
-        created += 1
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(content)
+            print(f"CREATED: {filename}")
+            created += 1
 
-print(f"\nГотово! Создано: {created}, Пропущено (уже существуют): {skipped}")
+        if os.path.exists(photo_dir):
+            print(f"SKIP photo dir (exists): {photo_dir}")
+            photos_skipped += 1
+        else:
+            os.makedirs(photo_dir)
+            print(f"CREATED photo dir: {photo_dir}")
+            photos_created += 1
+
+print(f"\nГотово!")
+print(f"  Файлы станций  — создано: {created}, пропущено: {skipped}")
+print(f"  Папки фото     — создано: {photos_created}, пропущено: {photos_skipped}")
