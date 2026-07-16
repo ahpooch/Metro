@@ -123,6 +123,12 @@ permalink: /lines/
             {% endif %}
 
             <div class="card-body">
+              {% if station.line_name %}
+              <div class="card-line">
+                <span class="line-dot" style="background-color: {{ station.line_color | default: '#888' }}"></span>
+                {{ station.line_name }}
+              </div>
+              {% endif %}
               <a class="card-title" href="{{ station.url | relative_url }}">{{ station.title }}</a>
 
               <span class="card-status {% if card_visited %}visited{% else %}not-visited{% endif %}">
