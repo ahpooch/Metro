@@ -6,6 +6,6 @@ line_name: "Калужско-Рижская"
 line_number: 6
 line_color: "#f58220"
 
-cover_photo:
+cover_photo: 'assets\photos\kaluzhsko-rizhskaya-tyoplyy-stan\IMG20260616222121 (Малый).jpg'
 photos: []
 ---
